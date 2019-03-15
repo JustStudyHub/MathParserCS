@@ -3,10 +3,10 @@ using MathParserCS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
-namespace MathParserTests
+namespace MathParserCSTests
 {
     [TestClass]
-    public class UnitTest1
+    public class MathParserTests
     {
         [TestMethod]
         public void CorrectExprWithoutBrackets()
