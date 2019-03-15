@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace MathParserCS
 {
-    class ValueNode
+    internal class ValueNode
     {
+        public double Value { get; set; }
         public ValueNode(double value)
         {
             Value = value;
         }
-        public double Value { get; set; }
     }
 }
