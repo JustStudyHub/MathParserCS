@@ -44,9 +44,11 @@ namespace MathParserCS
         private static void Parse(string expression)
         {
             OperList = new List<OperNode>();
+
             int operWeight = 1;
             int factor = 1;
             string value = "";
+
             OperNode lastOper = null;
             for(int i = 0; i < expression.Length; ++i)
             {

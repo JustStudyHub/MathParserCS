@@ -83,10 +83,13 @@ namespace MathParserCSTests
             string expr1 = "6+2*/11=";
             string expr2 = "*8/6="; 
             string expr3 = "11(7)*8=";
-            string expr4 = "11.8*8=/6=";
-            string expr5 = "11,8(*8,4/6)=";
+            string expr4 = "8=/6=";
+            string expr5 = "11,8(8,4/6)=";
             string expr6 = "11.8*8=6=";
-            string expr7 = "d*8=6=";
+            string expr7 = "d*8=";
+            string expr8 = "11,8(*8,4/6)=";
+            string expr9 = "1+2*=";
+            string expr10 = "1+2*";
 
             Action action;
             action = (() => MathParser.GetRes(expr1));
@@ -102,6 +105,12 @@ namespace MathParserCSTests
             action = (() => MathParser.GetRes(expr6));
             Assert.ThrowsException<ArgumentException>(action);
             action = (() => MathParser.GetRes(expr7));
+            Assert.ThrowsException<ArgumentException>(action);
+            action = (() => MathParser.GetRes(expr8));
+            Assert.ThrowsException<ArgumentException>(action);
+            action = (() => MathParser.GetRes(expr9));
+            Assert.ThrowsException<ArgumentException>(action);
+            action = (() => MathParser.GetRes(expr10));
             Assert.ThrowsException<ArgumentException>(action);
         }
     }
