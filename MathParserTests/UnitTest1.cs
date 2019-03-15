@@ -2,7 +2,6 @@
 using MathParserCS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-
 namespace MathParserCSTests
 {
     [TestClass]

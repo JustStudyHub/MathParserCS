@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MathParserCS
 {
     public static class MathParser
     {
-        static List<OperNode> OperList;
+        private static List<OperNode> _operList;
         public static double GetRes(string expression)
         {
             double res = 0;
             expression = ValidateInput(expression);
             Parse(expression);
-            var orderList = OperList.OrderByDescending(n=>n.OperVeight);
+            var orderList = _operList.OrderByDescending(n=>n.OperVeight);
             foreach(var oper in orderList)
             {
                 double operRes = 0;
@@ -43,7 +42,7 @@ namespace MathParserCS
         }        
         private static void Parse(string expression)
         {
-            OperList = new List<OperNode>();
+            _operList = new List<OperNode>();
 
             int operWeight = 1;
             int factor = 1;
@@ -125,7 +124,7 @@ namespace MathParserCS
                 lastOper.NextOper = oper;
             }
             lastOper = oper;
-            OperList.Add(oper);
+            _operList.Add(oper);
         }
         private static double GetValue(string strValue)
         {
@@ -134,8 +133,7 @@ namespace MathParserCS
             if (!parseIsSuccess)
                 throw new ArgumentException($"Invalid input: {strValue}");
             return res;
-        }    
-        
+        }            
         private static string ValidateInput(string expression)
         {
             if(!char.IsDigit(expression[0]) && expression[0] !='(' && expression[0] != '-')
@@ -181,7 +179,6 @@ namespace MathParserCS
                 stringBuilder.Append('=');
             return stringBuilder.ToString();
         }
-
         private static bool IsBracket(char symbol)
         {
             if (symbol == ')' || symbol == '(')
