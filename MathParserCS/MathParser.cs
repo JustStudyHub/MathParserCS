@@ -12,7 +12,7 @@ namespace MathParserCS
         public static double GetRes(string expression)
         {
             double res = 0;
-            expression = ClearExpr(expression);
+            expression = ValidateInput(expression);
             Parse(expression);
             var orderList = OperList.OrderByDescending(n=>n.OperVeight);
             foreach(var oper in orderList)
@@ -111,7 +111,10 @@ namespace MathParserCS
         }
         private static void CreateNodes(string value, string operType, int operWeight, ref OperNode lastOper)
         {
-            double dVal = GetValue(value);
+            double dVal = 0;
+            if (!string.IsNullOrEmpty(value))
+                dVal = GetValue(value);
+
             ValueNode valNode = new ValueNode(dVal);
             OperNode oper = new OperNode(operType, operWeight, valNode, lastOper);
             if (lastOper != null)
@@ -131,17 +134,57 @@ namespace MathParserCS
             return res;
         }    
         
-        private static string ClearExpr(string expression)
+        private static string ValidateInput(string expression)
         {
+            if(!char.IsDigit(expression[0]) && expression[0] !='(' && expression[0] != '-')
+                throw new ArgumentException($"Invalid input: expression may not start whith symbol {expression[0]}");
             char[] temp = expression.ToCharArray();
             for(int i = 0; i < temp.Length; i++)
             {
                 if (temp[i] == ',')
                     temp[i] = '.';
             }
+            for (int i = 0; i < temp.Length - 1; i++)
+            {
+                if (char.IsDigit(temp[i]) && temp[i + 1] == '(')
+                    throw new ArgumentException($"Invalid input: {temp[i]}{temp[i + 1]}");
+                if (temp[i] == '=')
+                    throw new ArgumentException($"Invalid input: {temp[i]}{temp[i + 1]}");
+                if (!char.IsDigit(temp[i]) && !char.IsDigit(temp[i+1]))
+                {
+                    if (temp[i]=='(' && temp[i + 1] ==')')
+                        throw new ArgumentException($"Invalid input: {temp[i]}{temp[i + 1]}");
+                    if (IsBracket(temp[i]) && IsBracket(temp[i + 1]))
+                        continue;
+                    if (IsBracket(temp[i]))
+                    {
+                        if((temp[i+1] != '-') && (temp[i] == '('))
+                            throw new ArgumentException($"Invalid input: {temp[i]}{temp[i + 1]}");
+                    }
+                    else if(IsBracket(temp[i + 1]))
+                    {
+                        if (temp[i+1] == ')')
+                            throw new ArgumentException($"Invalid input: {temp[i]}{temp[i + 1]}");
+                    }
+                    else
+                    {
+                        throw new ArgumentException($"Invalid input: {temp[i]}{temp[i + 1]}");
+                    }
+                }
+            }
+            
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append(temp);
+            if (temp[temp.Length - 1] != '=')
+                stringBuilder.Append('=');
             return stringBuilder.ToString();
+        }
+
+        private static bool IsBracket(char symbol)
+        {
+            if (symbol == ')' || symbol == '(')
+                return true;
+            return false;
         }
     }
 }
